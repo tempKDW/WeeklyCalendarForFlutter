@@ -17,6 +17,10 @@ class MyApp extends StatelessWidget {
         body: Column(
           children: [
             WeeklyCalendar(
+              events: {
+                DateTime(2024, 8, 5): [1,],
+                DateTime(2024, 8, 9): [1,2,3],
+              },
               calendarStyle: const CalendarStyle(
                 locale: "en_US",
                 padding: EdgeInsets.symmetric(vertical: 14, horizontal: 20),

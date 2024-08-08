@@ -8,9 +8,19 @@ import 'widgets/header_date_text.dart';
 import 'widgets/week_page.dart';
 import 'shared/utils.dart' show getWeekdays;
 
+
+class Event {
+  final DateTime date;
+  final String memberName;
+
+  Event({required this.date, required this.memberName});
+}
+
+
 class WeeklyCalendar extends StatefulWidget {
   const WeeklyCalendar({
     super.key,
+    required this.events,
     this.calendarStyle = const CalendarStyle(
       padding: EdgeInsets.symmetric(vertical: 14, horizontal: 20),
       margin: EdgeInsets.all(14),
@@ -24,6 +34,7 @@ class WeeklyCalendar extends StatefulWidget {
     this.onChangedPage,
   });
 
+  final Map<DateTime, List> events;
   final CalendarStyle calendarStyle;
   final bool isAutoSelect;
   final Function(DateTime)? onChangedSelectedDate;
@@ -72,6 +83,7 @@ class _WeeklyCalendarState extends State<WeeklyCalendar> {
             WeekPage(
               selectedDate: selectedDate,
               now: now,
+              events: widget.events,
               style: widget.calendarStyle,
               isAutoSelect: widget.isAutoSelect,
               onChangedPage: (date, state) {

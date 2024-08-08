@@ -11,6 +11,7 @@ class DayTableView extends StatelessWidget {
     required this.selectedDate,
     required this.currentDate,
     required this.style,
+    required this.events,
   });
 
   final List<DateTime> weekdays;
@@ -18,6 +19,7 @@ class DayTableView extends StatelessWidget {
   final DateTime selectedDate;
   final DateTime currentDate;
   final CalendarStyle style;
+  final Map<DateTime, List> events;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class DayTableView extends StatelessWidget {
             ...weekdays.map(
               (date) {
                 return GestureDetector(
-                  onTap: () => onSelect?.call(date),
+                  onTap: () => onSelect?.call(DateTime(date.year, date.month, date.day)),
                   child: DayCell(
                     display: date,
                     selected: selectedDate,
@@ -40,7 +42,28 @@ class DayTableView extends StatelessWidget {
             ).toList(),
           ],
         ),
+        TableRow(
+          children: [
+            ...weekdays.map(
+              (date) {
+                int eventCount = events[DateTime(date.year, date.month, date.day)]?.length ?? 0;
+                return GestureDetector(
+                  child: Text(
+                    eventCount.toString(), 
+                    style: TextStyle(color: getColorBasedOnValue(eventCount), fontSize: 12), textAlign: TextAlign.center,
+                  )
+                );
+              },
+            ).toList(),
+          ]
+        )
       ],
     );
+  }
+
+  Color getColorBasedOnValue(int value) {
+    const int maxValue = 10;
+    double t = (value.clamp(0, maxValue) / maxValue).toDouble();
+    return Color.lerp(Colors.white, Colors.red, t)!;
   }
 }

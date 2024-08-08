@@ -17,6 +17,7 @@ class WeekPage extends StatefulWidget {
     super.key,
     required this.selectedDate,
     required this.now,
+    required this.events,
     required this.style,
     required this.isAutoSelect,
     this.onChangedSelectedDate,
@@ -27,11 +28,12 @@ class WeekPage extends StatefulWidget {
   final DateTime selectedDate;
   final CalendarStyle style;
   final bool isAutoSelect;
+  final Map<DateTime, List> events;
 
   final Function(DateTime)? onChangedSelectedDate;
   final Function(DateTime date, PageState state)? onChangedPage;
 
-  final double height = 45;
+  final double height = 60;
 
   @override
   State<StatefulWidget> createState() => _WeekPageState();
@@ -43,7 +45,7 @@ class _WeekPageState extends State<WeekPage> {
   List<int> pageCounts = [0, 1, 2];
   int currentPage = 1;
   late DateTime _currentPageDate;
-  late DateTime _slectedDate;
+  late DateTime _selectedDate;
 
   DateTime get now => widget.now;
   DateTime get selectedDate => widget.selectedDate;
@@ -52,7 +54,7 @@ class _WeekPageState extends State<WeekPage> {
   void initState() {
     super.initState();
     _currentPageDate = selectedDate;
-    _slectedDate = selectedDate;
+    _selectedDate = selectedDate;
   }
 
   @override
@@ -94,19 +96,20 @@ class _WeekPageState extends State<WeekPage> {
       selectedDate: selectedDate,
       currentDate: now,
       style: widget.style,
+      events: widget.events,
     );
   }
 
   void changeSelectedDate(int value) {
     if (_pageState(value) == PageState.next) {
-      _slectedDate = addDay(selectedDate, 7);
+      _selectedDate = addDay(selectedDate, 7);
       if (widget.isAutoSelect) {
-        widget.onChangedSelectedDate?.call(_slectedDate);
+        widget.onChangedSelectedDate?.call(_selectedDate);
       }
     } else {
-      _slectedDate = subtractDay(selectedDate, 7);
+      _selectedDate = subtractDay(selectedDate, 7);
       if (widget.isAutoSelect) {
-        widget.onChangedSelectedDate?.call(_slectedDate);
+        widget.onChangedSelectedDate?.call(_selectedDate);
       }
     }
   }
